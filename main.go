@@ -14,8 +14,17 @@ func init() {
 func main() {
 	r := gin.Default()
 
-	// >> Users controllers
+	// >> Users routes
 	r.GET("/users", controllers.GetAllUsers)
+	r.GET("/users/:id", controllers.GetUserByID)
+
+	// >> Devices routes
+	r.GET("/devices", controllers.GetAllDevices)
+	r.GET("/devices/:id", controllers.GetDeviceById)
+
+	// >> Devices routes
+	r.GET("/rooms", controllers.GetAllRooms)
+	r.GET("/rooms/:id", controllers.GetAllRoomsByID)
 
 	r.Run()
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kaizerpwn/homelab-backend/controllers"
 	"github.com/kaizerpwn/homelab-backend/initializers"
 )
 
@@ -11,12 +12,10 @@ func init() {
 }
 
 func main() {
-
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+
+	// >> Users controllers
+	r.GET("/users", controllers.GetAllUsers)
+
 	r.Run()
 }

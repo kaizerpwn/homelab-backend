@@ -1,6 +1,6 @@
 module github.com/kaizerpwn/homelab-backend
 
-go 1.21.1
+go 1.21
 
 require (
 	github.com/bytedance/sonic v1.10.1 // indirect

@@ -30,8 +30,10 @@ func main() {
 	}))
 
 	// >> Users routes
-	r.GET("/api/users", controllers.GetAllUsers)
 	r.GET("/api/users/:id", controllers.GetUserByID)
+	r.GET("/api/users", controllers.GetAllUsers)
+	r.POST("/api/users/register", controllers.Register)
+	r.POST("/api/users/login", controllers.Login)
 
 	// >> Devices routes
 	r.GET("/api/devices", controllers.GetAllDevices)

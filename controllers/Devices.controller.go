@@ -22,7 +22,7 @@ func GetDeviceById(c *gin.Context) {
 
 	id := c.Param("id")
 
-	var device []models.Devices
+	var device models.Devices
 	result := initializers.DB.First(&device, id)
 
 	if result.Error != nil {

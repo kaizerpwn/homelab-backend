@@ -20,7 +20,7 @@ func GetAllRooms(c *gin.Context) {
 func GetAllRoomsByID(c *gin.Context) {
 
 	// >> Get all rooms from database
-	var room []models.Rooms
+	var room models.Rooms
 	result := initializers.DB.Find(room)
 
 	if result.Error != nil {

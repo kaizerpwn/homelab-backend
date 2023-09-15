@@ -8,6 +8,6 @@ type Device struct {
 	Name     string `gorm:"size:64;index"`
 	Category string `gorm:"size:64;"`
 	RoomID   int
-	Room     Room `gorm:"foreignKey:RoomID;"`
+	Room     Room `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Status   int8
 }

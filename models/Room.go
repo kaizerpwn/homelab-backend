@@ -8,5 +8,5 @@ type Room struct {
 	Name         string `gorm:"size:64;index"`
 	SquareMeters float64
 	HouseID      int
-	House        House `gorm:"foreignKey:HouseID"`
+	House        House `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }

@@ -12,6 +12,7 @@ func init() {
 
 func main() {
 	initializers.DB.AutoMigrate(&models.User{})
-	initializers.DB.AutoMigrate(&models.Rooms{})
-	initializers.DB.AutoMigrate(&models.Devices{})
+	initializers.DB.AutoMigrate(&models.House{})
+	initializers.DB.AutoMigrate(&models.Room{})
+	initializers.DB.AutoMigrate(&models.Device{})
 }

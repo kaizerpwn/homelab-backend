@@ -11,7 +11,7 @@ import (
 func GetAllRooms(c *gin.Context) {
 
 	// >> Get all rooms from database
-	var rooms []models.Rooms
+	var rooms []models.Room
 	initializers.DB.Find(rooms)
 
 	c.IndentedJSON(http.StatusOK, rooms)
@@ -20,7 +20,7 @@ func GetAllRooms(c *gin.Context) {
 func GetAllRoomsByID(c *gin.Context) {
 
 	// >> Get all rooms from database
-	var room models.Rooms
+	var room models.Room
 	result := initializers.DB.Find(room)
 
 	if result.Error != nil {

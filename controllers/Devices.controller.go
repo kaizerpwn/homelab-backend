@@ -11,7 +11,7 @@ import (
 func GetAllDevices(c *gin.Context) {
 
 	// Get all devices from database
-	var devices []models.Devices
+	var devices []models.Device
 	initializers.DB.Find(&devices)
 
 	c.IndentedJSON(http.StatusOK, devices)
@@ -22,7 +22,7 @@ func GetDeviceById(c *gin.Context) {
 
 	id := c.Param("id")
 
-	var device models.Devices
+	var device models.Device
 	result := initializers.DB.First(&device, id)
 
 	if result.Error != nil {

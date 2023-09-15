@@ -2,11 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
-type Devices struct {
+type Device struct {
 	gorm.Model
 	ID       int    `gorm:"primaryKey;autoIncrement"`
 	Name     string `gorm:"size:64;index"`
 	Category string `gorm:"size:64;"`
-	Room     int
+	RoomID   int
+	Room     Room `gorm:"foreignKey:RoomID;"`
 	Status   int8
 }

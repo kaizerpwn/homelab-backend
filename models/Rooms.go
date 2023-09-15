@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type Rooms struct {
 	gorm.Model
-	ID   int
-	Name string
+	ID   int    `gorm:"primaryKey;autoIncrement"`
+	Name string `gorm:"size:64;index"`
 }

@@ -34,31 +34,42 @@ func GetUserByID(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	// >> Login user to his account if account exist
 	var body struct {
-		Email    string
-		Password string
+		Email    string `json:"email" binding:"required"`
+		Password string `json:"password" binding:"required"`
 	}
 
-	c.Bind(&body)
+	// >> Parse JSON request body and bind it to the struct
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Bad Request",
+		})
+		return
+	}
 
+	// >> Find user in the database
 	var user models.User
-	result := initializers.DB.First(&user, body)
+	result := initializers.DB.First(&user, "email = ?", body.Email)
 
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "User with that credentials doesn't exist.",
 		})
+		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
 }
 
 func Register(c *gin.Context) {
 	var body struct {
-		Name     string
-		Surname  string
-		Email    string
-		Password string
-		City     string
+		Name     string `json:"name" binding:"required"`
+		Surname  string `json:"surname" binding:"required"`
+		Email    string `json:"email" binding:"required"`
+		Password string `json:"password" binding:"required"`
+		City     string `json:"city" binding:"required"`
 	}
 	c.Bind(&body)
 

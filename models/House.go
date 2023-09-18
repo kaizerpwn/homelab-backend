@@ -15,4 +15,6 @@ type House struct {
 	SquareMeters float32
 	Latitude     float32
 	Longitude    float32
+	UserID       int
+	User         User `gorm:"constraint:OnUpdate:CASCADE, OnDelete:CASCADE;"`
 }

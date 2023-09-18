@@ -9,11 +9,9 @@ import (
 )
 
 func GetAllDevices(c *gin.Context) {
-
 	// Get all devices from database
 	var devices []models.Device
 	initializers.DB.Find(&devices)
-
 	c.IndentedJSON(http.StatusOK, devices)
 }
 

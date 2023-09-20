@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kaizerpwn/homelab-backend/initializers"
 	"github.com/kaizerpwn/homelab-backend/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetAllUsers(c *gin.Context) {
@@ -58,9 +59,15 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"user": user,
-	})
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"user": user,
+		})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Password is not valid.",
+		})
+	}
 }
 
 func Register(c *gin.Context) {
@@ -71,9 +78,23 @@ func Register(c *gin.Context) {
 		Password string `json:"password" binding:"required"`
 		City     string `json:"city" binding:"required"`
 	}
-	c.Bind(&body)
 
-	// Check if user already exists in database
+	if err := c.Bind(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid request data",
+		})
+		return
+	}
+
+	// >> Check if any of the fields are empty
+	if body.Name == "" || body.Surname == "" || body.Email == "" || body.Password == "" || body.City == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "All fields are required",
+		})
+		return
+	}
+
+	// >> Check if user already exists in database
 	var existingUser models.User
 	result := initializers.DB.Where("email = ?", body.Email).First(&existingUser)
 	if result.Error == nil {
@@ -83,8 +104,17 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Insert new user into database
-	user := models.User{Name: body.Name, Surname: body.Surname, Email: body.Email, City: body.City, Password: body.Password}
+	// >> Hash password with bcrypt
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Internal server error.",
+		})
+		return
+	}
+
+	// >> Insert new user into database
+	user := models.User{Name: body.Name, Surname: body.Surname, Email: body.Email, City: body.City, Password: string(hashedPassword)}
 	result = initializers.DB.Create(&user)
 
 	if result.Error != nil {

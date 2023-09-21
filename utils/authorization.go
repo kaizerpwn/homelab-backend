@@ -1,9 +1,7 @@
 package utils
 
 import (
-	"crypto/rand"
 	"crypto/sha256"
-	"encoding/base64"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,13 +11,6 @@ import (
 	"github.com/square/go-jose"
 	"golang.org/x/crypto/hkdf"
 )
-
-func GenerateRandomToken() string {
-	// >> Generate a random token for the refresh token
-	tokenBytes := make([]byte, 32)
-	rand.Read(tokenBytes)
-	return base64.StdEncoding.EncodeToString(tokenBytes)
-}
 
 func VerifyToken(c *gin.Context) {
 	// >> Get cookie from request

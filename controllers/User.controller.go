@@ -9,6 +9,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// @BasePath /api
+
+// @Summary Get all users from the database
+// @Description Fetch all users from the database (administrator permission needed)
+// @Tags users
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.User
+// @Router /users [get]
 func GetAllUsers(c *gin.Context) {
 
 	// >> Get all users from database
@@ -18,6 +27,15 @@ func GetAllUsers(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, users)
 }
 
+// @Summary Get a User by ID
+// @Description Retrieve a user's information by their unique ID.
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID" Format(int64)
+// @Success 200 {object} models.User
+// @Failure 404 {string} string "User with that ID doesn't exist"
+// @Router /users/{id} [get]
 func GetUserByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -34,6 +52,18 @@ func GetUserByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, user)
 }
 
+// @Summary User Login
+// @Description Authenticates a user based on provided email and password.
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param email body string true "User's email address" Format(email)
+// @Param password body string true "User's password"
+// @Success 200 {object} models.User
+// @Failure 400 {string} string "Bad Request"
+// @Failure 401 {string} string "Invalid Password"
+// @Failure 404 {string} string "User with that credentials doesn't exist."
+// @Router /users/login [post]
 func Login(c *gin.Context) {
 	var body struct {
 		Email    string `json:"email" binding:"required"`
@@ -70,6 +100,22 @@ func Login(c *gin.Context) {
 	}
 }
 
+// @Summary User Registration
+// @Description Creates a new user account with the provided information.
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param name body string true "User's first name"
+// @Param surname body string true "User's last name"
+// @Param email body string true "User's email address" Format(email)
+// @Param password body string true "User's password"
+// @Param city body string true "User's city"
+// @Success 200 {string} string "Account successfully registered."
+// @Failure 400 {string} string "Invalid request data"
+// @Failure 400 {string} string "All fields are required"
+// @Failure 409 {string} string "User already exists."
+// @Failure 500 {string} string "Internal server error."
+// @Router /users/register [post]
 func Register(c *gin.Context) {
 	var body struct {
 		Name     string `json:"name" binding:"required"`

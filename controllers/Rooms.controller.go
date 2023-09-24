@@ -8,6 +8,13 @@ import (
 	"github.com/kaizerpwn/homelab-backend/models"
 )
 
+// @Summary Get all Rooms
+// @Description Fetches a list of all rooms from the database.
+// @Tags rooms
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Room
+// @Router /rooms [get]
 func GetAllRooms(c *gin.Context) {
 
 	// >> Get all rooms from database
@@ -17,6 +24,15 @@ func GetAllRooms(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, rooms)
 }
 
+// @Summary Get a Room by ID
+// @Description Retrieve a room's information by its unique ID.
+// @Tags rooms
+// @Accept json
+// @Produce json
+// @Param id path int true "Room ID" Format(int64)
+// @Success 200 {object} models.Room
+// @Failure 404 {string} string "Room with that ID doesn't exist."
+// @Router /rooms/{id} [get]
 func GetAllRoomsByID(c *gin.Context) {
 
 	// >> Get all rooms from database

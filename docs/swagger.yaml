@@ -1,0 +1,381 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Device:
+    properties:
+      category:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      room:
+        $ref: '#/definitions/models.Room'
+      roomID:
+        type: integer
+      status:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  models.House:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      floors:
+        type: integer
+      garage:
+        type: boolean
+      id:
+        type: integer
+      latitude:
+        type: number
+      longitude:
+        type: number
+      parking:
+        type: boolean
+      squareMeters:
+        type: number
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      userID:
+        type: integer
+      zipCode:
+        type: string
+    type: object
+  models.Room:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      house:
+        $ref: '#/definitions/models.House'
+      houseID:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      squareMeters:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  models.User:
+    properties:
+      city:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /analytics/activedevices:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total number of active devices.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Get Number of Active Devices
+      tags:
+      - analytics
+  /analytics/devices:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total number of devices in the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Get Number of All Devices
+      tags:
+      - analytics
+  /analytics/rooms:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total number of rooms in the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Get Number of All Rooms
+      tags:
+      - analytics
+  /devices:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a list of all devices from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Device'
+            type: array
+      summary: Get all Devices
+      tags:
+      - devices
+  /devices/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a device's information by its unique ID.
+      parameters:
+      - description: Device ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Device'
+        "404":
+          description: Device with that ID doesn't exist.
+          schema:
+            type: string
+      summary: Get a Device by ID
+      tags:
+      - devices
+  /rooms:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a list of all rooms from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Room'
+            type: array
+      summary: Get all Rooms
+      tags:
+      - rooms
+  /rooms/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a room's information by its unique ID.
+      parameters:
+      - description: Room ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Room'
+        "404":
+          description: Room with that ID doesn't exist.
+          schema:
+            type: string
+      summary: Get a Room by ID
+      tags:
+      - rooms
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Fetch all users from the database (administrator permission needed)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Get all users from the database
+      tags:
+      - users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a user's information by their unique ID.
+      parameters:
+      - description: User ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: User with that ID doesn't exist
+          schema:
+            type: string
+      summary: Get a User by ID
+      tags:
+      - users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user based on provided email and password.
+      parameters:
+      - description: User's email address
+        format: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: User's password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Invalid Password
+          schema:
+            type: string
+        "404":
+          description: User with that credentials doesn't exist.
+          schema:
+            type: string
+      summary: User Login
+      tags:
+      - users
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account with the provided information.
+      parameters:
+      - description: User's first name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: User's last name
+        in: body
+        name: surname
+        required: true
+        schema:
+          type: string
+      - description: User's email address
+        format: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: User's password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      - description: User's city
+        in: body
+        name: city
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Account successfully registered.
+          schema:
+            type: string
+        "400":
+          description: All fields are required
+          schema:
+            type: string
+        "409":
+          description: User already exists.
+          schema:
+            type: string
+        "500":
+          description: Internal server error.
+          schema:
+            type: string
+      summary: User Registration
+      tags:
+      - users
+swagger: "2.0"

@@ -8,6 +8,11 @@ import (
 	"github.com/kaizerpwn/homelab-backend/controllers"
 	"github.com/kaizerpwn/homelab-backend/initializers"
 	"github.com/kaizerpwn/homelab-backend/utils"
+
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/kaizerpwn/homelab-backend/docs"
 )
 
 func init() {
@@ -30,27 +35,36 @@ func main() {
 		MaxAge: 12 * time.Hour,
 	}))
 
-	r.POST("/api/users/register", controllers.Register)
-	r.POST("/api/users/login", controllers.Login)
+	v1 := r.Group("/api")
 
-	r.Use(utils.VerifyToken)
+	users := v1.Group("/users")
+	{
+		users.POST("/register", controllers.Register)
+		users.POST("/login", controllers.Login)
 
-	// >> Users routes
-	r.GET("/api/users/:id", utils.VerifyToken, controllers.GetUserByID)
-	r.GET("/api/users", utils.VerifyToken, controllers.GetAllUsers)
+		users.GET("/:id", utils.VerifyToken, controllers.GetUserByID)
+		users.GET("/", utils.VerifyToken, controllers.GetAllUsers)
+	}
 
-	// >> Devices routes
-	r.GET("/api/devices", utils.VerifyToken, controllers.GetAllDevices)
-	r.GET("/api/devices/:id", utils.VerifyToken, controllers.GetDeviceById)
+	devices := v1.Group("/devices")
+	{
+		devices.GET("/", utils.VerifyToken, controllers.GetAllDevices)
+		devices.GET("/:id", utils.VerifyToken, controllers.GetDeviceById)
+	}
 
-	// >> Devices routes
-	r.GET("/api/rooms", utils.VerifyToken, controllers.GetAllRooms)
-	r.GET("/api/rooms/:id", utils.VerifyToken, controllers.GetAllRoomsByID)
+	rooms := v1.Group("/rooms")
+	{
+		rooms.GET("/", utils.VerifyToken, controllers.GetAllRooms)
+		rooms.GET("/:id", utils.VerifyToken, controllers.GetAllRoomsByID)
+	}
 
-	// >> Analytics routes
-	r.GET("/api/analytics/rooms", utils.VerifyToken, controllers.GetNumberOfAllRooms)
-	r.GET("/api/analytics/devices", utils.VerifyToken, controllers.GetNumberOfAllDevices)
-	r.GET("/api/analytics/activedevices", utils.VerifyToken, controllers.GetNumberOfActiveDevices)
+	analytics := v1.Group("/analytics")
+	{
+		analytics.GET("/rooms", utils.VerifyToken, controllers.GetNumberOfAllRooms)
+		analytics.GET("/devices", utils.VerifyToken, controllers.GetNumberOfAllDevices)
+		analytics.GET("/activedevices", utils.VerifyToken, controllers.GetNumberOfActiveDevices)
+	}
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.Run()
 }

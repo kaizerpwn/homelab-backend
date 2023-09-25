@@ -14,7 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {array} models.Room
-// @Router /rooms [get]
+// @Router /api/rooms [get]
 func GetAllRooms(c *gin.Context) {
 
 	// >> Get all rooms from database
@@ -32,7 +32,7 @@ func GetAllRooms(c *gin.Context) {
 // @Param id path int true "Room ID" Format(int64)
 // @Success 200 {object} models.Room
 // @Failure 404 {string} string "Room with that ID doesn't exist."
-// @Router /rooms/{id} [get]
+// @Router /api/rooms/{id} [get]
 func GetAllRoomsByID(c *gin.Context) {
 
 	// >> Get all rooms from database

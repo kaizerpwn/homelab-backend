@@ -104,7 +104,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /analytics/activedevices:
+  /api/analytics/activedevices:
     get:
       consumes:
       - application/json
@@ -119,7 +119,7 @@ paths:
       summary: Get Number of Active Devices
       tags:
       - analytics
-  /analytics/devices:
+  /api/analytics/devices:
     get:
       consumes:
       - application/json
@@ -134,7 +134,22 @@ paths:
       summary: Get Number of All Devices
       tags:
       - analytics
-  /analytics/rooms:
+  /api/analytics/houses:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total number of houses.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Get Number of All Houses
+      tags:
+      - analytics
+  /api/analytics/rooms:
     get:
       consumes:
       - application/json
@@ -149,7 +164,7 @@ paths:
       summary: Get Number of All Rooms
       tags:
       - analytics
-  /devices:
+  /api/devices:
     get:
       consumes:
       - application/json
@@ -166,7 +181,7 @@ paths:
       summary: Get all Devices
       tags:
       - devices
-  /devices/{id}:
+  /api/devices/{id}:
     get:
       consumes:
       - application/json
@@ -192,7 +207,33 @@ paths:
       summary: Get a Device by ID
       tags:
       - devices
-  /rooms:
+  /api/houses/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a house's information by its unique ID
+      parameters:
+      - description: House ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.House'
+        "404":
+          description: Device with that ID doesn't exist.
+          schema:
+            type: string
+      summary: Get House by ID
+      tags:
+      - houses
+  /api/rooms:
     get:
       consumes:
       - application/json
@@ -209,7 +250,7 @@ paths:
       summary: Get all Rooms
       tags:
       - rooms
-  /rooms/{id}:
+  /api/rooms/{id}:
     get:
       consumes:
       - application/json
@@ -235,7 +276,7 @@ paths:
       summary: Get a Room by ID
       tags:
       - rooms
-  /users:
+  /api/users:
     get:
       consumes:
       - application/json
@@ -252,7 +293,7 @@ paths:
       summary: Get all users from the database
       tags:
       - users
-  /users/{id}:
+  /api/users/{id}:
     get:
       consumes:
       - application/json
@@ -278,7 +319,7 @@ paths:
       summary: Get a User by ID
       tags:
       - users
-  /users/login:
+  /api/users/login:
     post:
       consumes:
       - application/json
@@ -319,7 +360,7 @@ paths:
       summary: User Login
       tags:
       - users
-  /users/register:
+  /api/users/register:
     post:
       consumes:
       - application/json

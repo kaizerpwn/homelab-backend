@@ -46,10 +46,9 @@ func main() {
 		users.GET("/", utils.VerifyToken, controllers.GetAllUsers)
 	}
 
-	devices := v1.Group("/devices")
+	houses := v1.Group("/houses")
 	{
-		devices.GET("/", utils.VerifyToken, controllers.GetAllDevices)
-		devices.GET("/:id", utils.VerifyToken, controllers.GetDeviceById)
+		houses.GET("/:id", utils.VerifyToken, controllers.GetHouseById)
 	}
 
 	rooms := v1.Group("/rooms")
@@ -58,8 +57,15 @@ func main() {
 		rooms.GET("/:id", utils.VerifyToken, controllers.GetAllRoomsByID)
 	}
 
+	devices := v1.Group("/devices")
+	{
+		devices.GET("/", utils.VerifyToken, controllers.GetAllDevices)
+		devices.GET("/:id", utils.VerifyToken, controllers.GetDeviceById)
+	}
+
 	analytics := v1.Group("/analytics")
 	{
+		analytics.GET("/houses", utils.VerifyToken, controllers.GetNumberOfAllHouses)
 		analytics.GET("/rooms", utils.VerifyToken, controllers.GetNumberOfAllRooms)
 		analytics.GET("/devices", utils.VerifyToken, controllers.GetNumberOfAllDevices)
 		analytics.GET("/activedevices", utils.VerifyToken, controllers.GetNumberOfActiveDevices)

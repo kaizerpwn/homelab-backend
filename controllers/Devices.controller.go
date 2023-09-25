@@ -14,7 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {array} models.Device
-// @Router /devices [get]
+// @Router /api/devices [get]
 func GetAllDevices(c *gin.Context) {
 	// Get all devices from database
 	var devices []models.Device
@@ -30,7 +30,7 @@ func GetAllDevices(c *gin.Context) {
 // @Param id path int true "Device ID" Format(int64)
 // @Success 200 {object} models.Device
 // @Failure 404 {string} string "Device with that ID doesn't exist."
-// @Router /devices/{id} [get]
+// @Router /api/devices/{id} [get]
 func GetDeviceById(c *gin.Context) {
 	// >> Get specific device with id given
 

@@ -17,7 +17,7 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {array} models.User
-// @Router /users [get]
+// @Router /api/users [get]
 func GetAllUsers(c *gin.Context) {
 
 	// >> Get all users from database
@@ -35,7 +35,7 @@ func GetAllUsers(c *gin.Context) {
 // @Param id path int true "User ID" Format(int64)
 // @Success 200 {object} models.User
 // @Failure 404 {string} string "User with that ID doesn't exist"
-// @Router /users/{id} [get]
+// @Router /api/users/{id} [get]
 func GetUserByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -63,7 +63,7 @@ func GetUserByID(c *gin.Context) {
 // @Failure 400 {string} string "Bad Request"
 // @Failure 401 {string} string "Invalid Password"
 // @Failure 404 {string} string "User with that credentials doesn't exist."
-// @Router /users/login [post]
+// @Router /api/users/login [post]
 func Login(c *gin.Context) {
 	var body struct {
 		Email    string `json:"email" binding:"required"`
@@ -115,7 +115,7 @@ func Login(c *gin.Context) {
 // @Failure 400 {string} string "All fields are required"
 // @Failure 409 {string} string "User already exists."
 // @Failure 500 {string} string "Internal server error."
-// @Router /users/register [post]
+// @Router /api/users/register [post]
 func Register(c *gin.Context) {
 	var body struct {
 		Name     string `json:"name" binding:"required"`

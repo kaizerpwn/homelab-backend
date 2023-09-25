@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/analytics/activedevices": {
+        "/api/analytics/activedevices": {
             "get": {
                 "description": "Retrieves the total number of active devices.",
                 "consumes": [
@@ -38,7 +38,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/analytics/devices": {
+        "/api/analytics/devices": {
             "get": {
                 "description": "Retrieves the total number of devices in the database.",
                 "consumes": [
@@ -61,7 +61,30 @@ const docTemplate = `{
                 }
             }
         },
-        "/analytics/rooms": {
+        "/api/analytics/houses": {
+            "get": {
+                "description": "Retrieves the total number of houses.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "analytics"
+                ],
+                "summary": "Get Number of All Houses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analytics/rooms": {
             "get": {
                 "description": "Retrieves the total number of rooms in the database.",
                 "consumes": [
@@ -84,7 +107,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/devices": {
+        "/api/devices": {
             "get": {
                 "description": "Fetches a list of all devices from the database.",
                 "consumes": [
@@ -110,7 +133,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/devices/{id}": {
+        "/api/devices/{id}": {
             "get": {
                 "description": "Retrieve a device's information by its unique ID.",
                 "consumes": [
@@ -149,7 +172,46 @@ const docTemplate = `{
                 }
             }
         },
-        "/rooms": {
+        "/api/houses/{id}": {
+            "get": {
+                "description": "Retrieve a house's information by its unique ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "houses"
+                ],
+                "summary": "Get House by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "House ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.House"
+                        }
+                    },
+                    "404": {
+                        "description": "Device with that ID doesn't exist.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rooms": {
             "get": {
                 "description": "Fetches a list of all rooms from the database.",
                 "consumes": [
@@ -175,7 +237,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/rooms/{id}": {
+        "/api/rooms/{id}": {
             "get": {
                 "description": "Retrieve a room's information by its unique ID.",
                 "consumes": [
@@ -214,7 +276,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/api/users": {
             "get": {
                 "description": "Fetch all users from the database (administrator permission needed)",
                 "consumes": [
@@ -240,7 +302,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/login": {
+        "/api/users/login": {
             "post": {
                 "description": "Authenticates a user based on provided email and password.",
                 "consumes": [
@@ -302,7 +364,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/register": {
+        "/api/users/register": {
             "post": {
                 "description": "Creates a new user account with the provided information.",
                 "consumes": [
@@ -391,7 +453,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/users/{id}": {
             "get": {
                 "description": "Retrieve a user's information by their unique ID.",
                 "consumes": [

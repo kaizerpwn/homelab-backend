@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {integer} int64
-// @Router /analytics/devices [get]
+// @Router /api/analytics/devices [get]
 func GetNumberOfAllDevices(c *gin.Context) {
 	// >> Get number of all devices
 	var deviceCount int64
@@ -28,7 +28,7 @@ func GetNumberOfAllDevices(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {integer} int64
-// @Router /analytics/rooms [get]
+// @Router /api/analytics/rooms [get]
 func GetNumberOfAllRooms(c *gin.Context) {
 	// >> Get number of all rooms
 	var deviceCount int64
@@ -43,11 +43,25 @@ func GetNumberOfAllRooms(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {integer} int64
-// @Router /analytics/activedevices [get]
+// @Router /api/analytics/activedevices [get]
 func GetNumberOfActiveDevices(c *gin.Context) {
 	// >> Get number of all inactive devices
 	var deviceCount int64
 	initializers.DB.Count(&deviceCount)
 
 	c.IndentedJSON(http.StatusOK, deviceCount)
+}
+
+// @Summary Get Number of All Houses
+// @Description Retrieves the total number of houses.
+// @Tags analytics
+// @Accept json
+// @Produce json
+// @Success 200 {integer} int64
+// @Router /api/analytics/houses [get]
+func GetNumberOfAllHouses(c *gin.Context) {
+	var housesCount int64
+	initializers.DB.Count(&housesCount)
+
+	c.IndentedJSON(http.StatusOK, housesCount)
 }

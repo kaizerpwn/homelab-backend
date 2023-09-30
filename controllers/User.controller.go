@@ -91,7 +91,12 @@ func Login(c *gin.Context) {
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err == nil {
 		c.JSON(http.StatusOK, gin.H{
-			"user": user,
+			"user": gin.H{
+				"image":   user.Image,
+				"name":    user.Name,
+				"surname": user.Surname,
+				"email":   user.Email,
+			},
 		})
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{

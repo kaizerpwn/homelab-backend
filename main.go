@@ -23,6 +23,9 @@ func init() {
 func main() {
 	r := gin.Default()
 
+	// >> 8 MB Maximum upload file size
+	r.MaxMultipartMemory = 8 << 20
+
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "DELETE", "POST"},
@@ -49,6 +52,7 @@ func main() {
 	houses := v1.Group("/houses")
 	{
 		houses.GET("/:id", utils.VerifyToken, controllers.GetHouseById)
+		houses.POST("/", utils.VerifyToken, controllers.CreateHouse)
 	}
 
 	rooms := v1.Group("/rooms")
